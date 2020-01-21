@@ -1,27 +1,21 @@
 import os
 from dotenv import load_dotenv
+import dj_database_url
+from distutils.util import strtobool
 
 load_dotenv(override=True)
 
 DATABASES = {}
-DB_SETTINGS = [
-    'ENGINE',
-    'HOST',
-    'PORT',
-    'NAME',
-    'USER',
-    'PASSWORD'
-]
+DB_DEFAULT = os.getenv('DATABASE_URL')
 
-DATABASES['default'] = {
-    setting: os.getenv(setting) for setting in DB_SETTINGS
-    }
+DATABASES['default'] = dj_database_url.config(default=DB_DEFAULT, conn_max_age=None)
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-
 INSTALLED_APPS = ['datacenter']
 
+DEBUG = os.getenv('DEBUG')
+DEBUG = bool(strtobool(DEBUG.lower()))
 
 ROOT_URLCONF = "project.urls"
 
